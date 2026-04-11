@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiche remédiation · 4 — Additionner deux fractions de même dénominateur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --vert-fort:#108c5a; --vert-bord:#0a6e3f; --vert-pale:#edf7f2;
+      --vert-clair:#c8edd9; --vert-moyen:#a8dfc4; --vert-doux:#d4f0e2;
+      --texte-fonce:#0d2b1f; --texte-vert:#108c5a;
+      --badge-bg:rgba(10,110,63,0.13); --badge-texte:#0a6e3f;
+    }
+    body.dys { font-family:'OpenDyslexic',Arial,sans-serif !important; }
+    body.dys .titre, body.dys .texte-intro, body.dys .q-texte,
+    body.dys .choix-btn, body.dys .btn, body.dys .feedback,
+    body.dys .regle-texte { font-family:'OpenDyslexic',Arial,sans-serif !important; line-height:1.9 !important; }
+    body.dys .q-texte   { font-size:20px !important; }
+    body.dys .choix-btn { font-size:20px !important; padding:18px 34px !important; }
+    body.dys .carte, body.dys .quiz-carte, body.dys .cours-carte { background:rgba(255,253,240,0.82) !important; }
+
+    @keyframes gradientWave { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes btnGlow { 0%{box-shadow:0 0 0px 0px rgba(10,110,63,0)} 50%{box-shadow:0 0 0px 10px rgba(10,110,63,0.15),0 0 0px 22px rgba(10,110,63,0.07)} 100%{box-shadow:0 0 0px 0px rgba(10,110,63,0)} }
+    @keyframes slideIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes regleFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+    html,body { height:100%; }
+    body { min-height:100vh; display:flex; align-items:center; justify-content:center; font-family:Arial,sans-serif; }
+
+    .header { position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px 28px;background:rgba(255,255,255,0.55);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,0.7);animation:fadeUp 0.6s cubic-bezier(.22,1,.36,1) both; }
+    .header-ligne { font-size:18px;font-weight:500;color:var(--texte-fonce);display:flex;align-items:center;gap:10px; }
+    .header-sep { color:var(--vert-fort);font-weight:700; }
+    .header-nom { font-weight:700;color:var(--vert-bord); }
+    .header-dys { position:absolute;right:20px;display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 14px;border-radius:999px;border:1.5px solid rgba(10,110,63,0.2);background:transparent;font-family:Arial,sans-serif;transition:all 0.2s; }
+    .header-dys:hover { background:rgba(10,110,63,0.07);border-color:var(--vert-bord); }
+    .dys-dot { width:30px;height:17px;border-radius:999px;background:#ccc;position:relative;flex-shrink:0;transition:background 0.3s; }
+    .dys-dot::after { content:'';position:absolute;top:2.5px;left:2.5px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform 0.3s cubic-bezier(.22,1,.36,1);box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+    .header-dys.on .dys-dot { background:var(--vert-fort); }
+    .header-dys.on .dys-dot::after { transform:translateX(13px); }
+    .dys-lbl { font-size:11px;font-weight:700;color:var(--texte-fonce);letter-spacing:0.04em; }
+
+    .ecran { display:flex;align-items:center;justify-content:center;width:100%;min-height:100vh;padding-top:70px; }
+    .ecran.cache { display:none; }
+    .fond-vert  { background:linear-gradient(135deg,var(--vert-clair),var(--vert-pale),var(--vert-moyen),var(--vert-pale),var(--vert-doux));background-size:400% 400%;animation:gradientWave 8s ease infinite; }
+    .fond-chaud { background:linear-gradient(135deg,#fdf6ec,#fef9f0,#fcebd8,#fef5e7,#fdf0e0);background-size:400% 400%;animation:gradientWave 8s ease infinite; }
+
+    .carte { background:rgba(255,255,255,0.62);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);border-radius:28px;padding:56px 64px 52px;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:480px;width:90%; }
+    .carte.anime { animation:fadeUp 0.8s cubic-bezier(.22,1,.36,1) both; }
+    .badge { font-size:11px;font-weight:700;color:var(--badge-texte);background:var(--badge-bg);padding:5px 18px;border-radius:999px;letter-spacing:0.07em;text-transform:uppercase; }
+    .titre { font-size:clamp(24px,5vw,32px);font-weight:500;color:var(--texte-fonce);text-align:center;line-height:1.25; }
+    .titre .accent { color:var(--texte-vert); }
+    .texte-intro { font-size:18px;font-weight:400;color:var(--texte-fonce);text-align:center;line-height:1.6;max-width:340px; }
+    .texte-intro strong { color:var(--vert-bord);font-weight:700; }
+    .accueil-dys { margin-top:6px;display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 18px;border-radius:999px;border:1.5px solid rgba(10,110,63,0.2);background:transparent;font-family:Arial,sans-serif;transition:all 0.2s; }
+    .accueil-dys:hover { background:rgba(10,110,63,0.06); }
+    .accueil-dys-dot { width:34px;height:19px;border-radius:999px;background:#ccc;position:relative;flex-shrink:0;transition:background 0.3s; }
+    .accueil-dys-dot::after { content:'';position:absolute;top:2.5px;left:2.5px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform 0.3s cubic-bezier(.22,1,.36,1);box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+    .accueil-dys.on .accueil-dys-dot { background:var(--vert-fort); }
+    .accueil-dys.on .accueil-dys-dot::after { transform:translateX(15px); }
+    .accueil-dys-texte { text-align:left; }
+    .accueil-dys-lbl { font-size:12px;font-weight:700;color:var(--texte-fonce);display:block; }
+    .accueil-dys-sub  { font-size:10px;color:#6b7c6b;display:block;margin-top:1px; }
+    .btn { margin-top:22px;padding:15px 54px;border-radius:999px;border:2.5px solid var(--vert-bord);background:transparent;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:0.04em;color:var(--vert-bord);animation:btnGlow 2.2s ease-in-out infinite;transition:background 0.2s,color 0.2s,transform 0.15s;font-family:inherit; }
+    .btn:hover { background:var(--vert-bord);color:#fff;transform:scale(1.05); }
+    .btn:active { transform:scale(0.97); }
+
+    /* ── COURS ── */
+    .cours-carte { background:rgba(255,255,255,0.70);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.9);border-radius:28px;padding:40px 52px 48px;display:flex;flex-direction:column;align-items:center;gap:0;max-width:620px;width:92%; }
+    .cours-prog-wrap { width:100%;margin-bottom:24px; }
+    .cours-prog-header { display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:10px; }
+    .cours-prog-badge { font-size:13px;font-weight:700;background:rgba(212,130,10,0.15);color:#b06a20;padding:5px 18px;border-radius:999px;letter-spacing:0.04em; }
+    .cours-prog-num { font-size:11px;font-weight:600;color:#c8913a;letter-spacing:0.05em;text-transform:uppercase; }
+    .cours-prog-track { width:100%;height:6px;background:rgba(180,100,20,0.12);border-radius:999px;overflow:hidden; }
+    .cours-prog-fill  { height:100%;background:#d4820a;border-radius:999px;transition:width 0.6s cubic-bezier(.22,1,.36,1);width:0%; }
+
+    .regle-bloc { width:100%;background:rgba(212,130,10,0.08);border-left:4px solid #d4820a;border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:0;animation:regleFadeIn 0.6s cubic-bezier(.22,1,.36,1) both; }
+    .regle-label { font-size:10px;font-weight:700;color:#b06a20;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px; }
+    .regle-texte { font-size:15px;font-weight:500;color:#3d2000;line-height:1.7; }
+
+    /* Affichage addition */
+    .addition-display { display:flex;align-items:center;gap:16px;justify-content:center;margin:20px 0 24px;flex-wrap:wrap; }
+    .frac-add { display:inline-flex;flex-direction:column;align-items:center;gap:5px; }
+    .frac-add .fa-n { font-size:52px;font-weight:700;color:#3d2000;line-height:1; }
+    .frac-add .fa-b { width:66px;height:4px;background:#3d2000;border-radius:2px; }
+    .frac-add .fa-d { font-size:52px;font-weight:700;color:#3d2000;line-height:1; }
+    .add-signe { font-size:40px;font-weight:700;color:#b06a20; }
+
+    /* Questions guidées */
+    .questions-guidees { width:100%;display:flex;flex-direction:column;gap:16px; }
+    .question-bloc { animation:slideIn 0.4s cubic-bezier(.22,1,.36,1) both; }
+    .q-label { font-size:11px;font-weight:700;color:#b06a20;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px; }
+    .q-texte { font-size:18px;font-weight:500;color:#3d2000;line-height:1.6;margin-bottom:12px; }
+    .q-texte .accent-q { color:#d4820a;font-weight:700; }
+
+    .champ-libre-wrap { display:flex;gap:10px;align-items:center;justify-content:center;width:100%; }
+    .champ-libre { width:90px;height:52px;border:2px solid rgba(180,100,20,0.3);border-radius:14px;background:rgba(255,255,255,0.7);font-size:26px;font-weight:700;color:#3d2000;text-align:center;outline:none;font-family:inherit;transition:border-color 0.2s; }
+    .champ-libre:focus { border-color:#d4820a; }
+    .btn-valider { padding:13px 28px;border-radius:14px;border:2px solid #d4820a;background:transparent;font-size:15px;font-weight:700;color:#d4820a;cursor:pointer;transition:background 0.18s,color 0.18s,transform 0.15s;font-family:inherit; }
+    .btn-valider:hover { background:#d4820a;color:#fff;transform:scale(1.04); }
+
+    .choix-wrap { display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%; }
+    .choix-btn { padding:13px 26px;border-radius:14px;border:2px solid rgba(180,100,20,0.25);background:rgba(255,255,255,0.65);font-size:17px;font-weight:600;color:#3d2000;cursor:pointer;transition:background 0.18s,border-color 0.18s,transform 0.15s;min-width:80px;text-align:center;font-family:inherit; }
+    .choix-btn:hover { background:rgba(212,130,10,0.12);border-color:#d4820a;transform:scale(1.04); }
+
+    .feedback-inline { font-size:14px;font-weight:700;padding:8px 18px;border-radius:10px;display:inline-flex;align-items:center;gap:6px;margin-top:4px;opacity:0;transition:opacity 0.3s; }
+    .feedback-inline.correct { background:rgba(16,140,90,0.15);color:#0a6e3f;opacity:1; }
+    .feedback-inline.faux    { background:rgba(200,50,50,0.12);color:#a83232;opacity:1; }
+
+    .fi { display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-weight:700;line-height:1.1;font-size:0.9em; }
+    .fi-b { width:100%;min-width:18px;height:2px;display:block;margin:1px 0;background:#3d2000; }
+
+    /* ── QUIZ FINAL ── */
+    .quiz-carte { background:rgba(255,255,255,0.62);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.85);border-radius:28px;padding:40px 48px 44px;display:flex;flex-direction:column;align-items:center;gap:20px;max-width:580px;width:92%; }
+    .prog-wrap { width:100%; }
+    .prog-label { font-size:12px;font-weight:700;color:var(--vert-bord);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:8px;text-align:center; }
+    .prog-track { width:100%;height:6px;background:rgba(10,110,63,0.12);border-radius:999px;overflow:hidden; }
+    .prog-fill  { height:100%;background:var(--vert-fort);border-radius:999px;transition:width 0.5s cubic-bezier(.22,1,.36,1);width:0%; }
+    .consigne-final { font-size:18px;font-weight:500;color:var(--texte-fonce);text-align:center;line-height:1.6; }
+    .addition-quiz { display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap;margin:4px 0; }
+    .frac-q { display:inline-flex;flex-direction:column;align-items:center;gap:4px; }
+    .frac-q .fq-n { font-size:46px;font-weight:700;color:var(--texte-fonce);line-height:1; }
+    .frac-q .fq-b { width:58px;height:3px;background:var(--texte-fonce);border-radius:2px; }
+    .add-signe-q { font-size:34px;font-weight:700;color:var(--vert-bord); }
+    .choix-wrap-final { display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%; }
+    .choix-btn-final { padding:13px 26px;border-radius:14px;border:2px solid rgba(10,110,63,0.2);background:rgba(255,255,255,0.6);font-size:17px;font-weight:600;color:var(--texte-fonce);cursor:pointer;transition:background 0.18s,border-color 0.18s,transform 0.15s;min-width:80px;text-align:center;font-family:inherit; }
+    .choix-btn-final:hover { background:rgba(16,140,90,0.1);border-color:var(--vert-fort);transform:scale(1.04); }
+    .feedback { font-size:15px;font-weight:700;padding:10px 24px;border-radius:12px;min-height:40px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;text-align:center; }
+    .feedback.correct { background:rgba(16,140,90,0.15);color:var(--vert-bord);opacity:1; }
+    .feedback.faux    { background:rgba(200,50,50,0.12);color:#a83232;opacity:1; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-ligne">
+      <span id="header-lycee">—</span>
+      <span class="header-sep">·</span>
+      <span id="header-classe">—</span>
+      <span class="header-sep">·</span>
+      <span class="header-nom" id="header-nom">—</span>
+    </div>
+    <button class="header-dys" id="header-dys" onclick="basculerDYS()">
+      <div class="dys-dot"></div>
+      <span class="dys-lbl">DYS</span>
+    </button>
+  </div>
+
+  <!-- ÉCRAN 0 : CHARGEMENT -->
+  <div class="ecran fond-vert" id="ecran-chargement">
+    <div class="carte anime">
+      <div class="badge">Fiche remédiation · 4</div>
+      <div class="titre">Chargement<br><span class="accent">en cours…</span></div>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 1 : ACCUEIL -->
+  <div class="ecran fond-vert cache" id="ecran-accueil">
+    <div class="carte anime">
+      <div class="badge">Fiche remédiation · 4</div>
+      <div class="titre">Additionner des fractions<br><span class="accent">de même dénominateur</span></div>
+      <button class="btn" onclick="versRetenir()">Commencer</button>
+      <button class="accueil-dys" id="accueil-dys" onclick="basculerDYS()">
+        <div class="accueil-dys-dot"></div>
+        <div class="accueil-dys-texte">
+          <span class="accueil-dys-lbl">Mode DYS</span>
+          <span class="accueil-dys-sub">Police et espacement adaptés</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 1B : À RETENIR -->
+  <div class="ecran fond-chaud cache" id="ecran-retenir">
+    <div class="cours-carte" style="max-width:580px;">
+      <div class="cours-prog-header" style="margin-bottom:24px;">
+        <div class="cours-prog-badge">À retenir</div>
+        <div class="cours-prog-num">Additionner des fractions de même dénominateur</div>
+      </div>
+      <div class="regle-bloc">
+        <div class="regle-label">La règle</div>
+        <div class="regle-texte">
+          Pour additionner deux fractions qui ont le <strong style="color:#d4820a;">même dénominateur</strong>, on additionne uniquement les <strong style="color:#d4820a;">numérateurs</strong>.<br><br>
+          Le dénominateur, lui, <strong>reste le même</strong> — on ne le touche pas.
+        </div>
+      </div>
+      <div style="width:100%;background:rgba(212,130,10,0.06);border-radius:14px;padding:20px 24px;margin-top:20px;">
+        <div style="font-size:11px;font-weight:700;color:#b06a20;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;">Exemple</div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;">
+          <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="font-size:32px;font-weight:700;color:#d4820a;line-height:1;">2</span>
+            <div style="width:44px;height:3px;background:#d4820a;border-radius:2px;"></div>
+            <span style="font-size:32px;font-weight:700;color:#d4820a;line-height:1;">7</span>
+          </div>
+          <span style="font-size:32px;font-weight:700;color:#b06a20;">+</span>
+          <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="font-size:32px;font-weight:700;color:#d4820a;line-height:1;">3</span>
+            <div style="width:44px;height:3px;background:#d4820a;border-radius:2px;"></div>
+            <span style="font-size:32px;font-weight:700;color:#d4820a;line-height:1;">7</span>
+          </div>
+          <span style="font-size:32px;font-weight:700;color:#b06a20;">=</span>
+          <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="font-size:32px;font-weight:700;color:#0a6e3f;line-height:1;">5</span>
+            <div style="width:44px;height:3px;background:#0a6e3f;border-radius:2px;"></div>
+            <span style="font-size:32px;font-weight:700;color:#0a6e3f;line-height:1;">7</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;font-size:14px;color:#5a3a00;line-height:1.6;text-align:center;">
+          2 + 3 = <strong style="color:#d4820a;">5</strong> → on écrit 5 au numérateur.<br>
+          Le dénominateur <strong>7 reste 7</strong>.
+        </div>
+      </div>
+      <div style="width:100%;display:flex;justify-content:center;margin-top:28px;">
+        <button onclick="versExercices()" style="padding:13px 48px;border-radius:999px;border:2.5px solid #d4820a;background:transparent;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.04em;color:#d4820a;transition:background 0.2s,color 0.2s,transform 0.15s;font-family:inherit;" onmouseover="this.style.background='#d4820a';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#d4820a'">Compris !</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 2 : EXERCICES GUIDÉS -->
+  <div class="ecran fond-chaud cache" id="ecran-cours">
+    <div class="cours-carte">
+      <div class="cours-prog-wrap">
+        <div class="cours-prog-header">
+          <div class="cours-prog-badge" id="cours-badge">Addition 1 / 6</div>
+          <div class="cours-prog-num">Même dénominateur</div>
+        </div>
+        <div class="cours-prog-track"><div class="cours-prog-fill" id="cours-fill"></div></div>
+      </div>
+      <div class="addition-display">
+        <div class="frac-add">
+          <div class="fa-n" id="fa-n1">1</div>
+          <div class="fa-b"></div>
+          <div class="fa-d" id="fa-d1">5</div>
+        </div>
+        <div class="add-signe">+</div>
+        <div class="frac-add">
+          <div class="fa-n" id="fa-n2">2</div>
+          <div class="fa-b"></div>
+          <div class="fa-d" id="fa-d2">5</div>
+        </div>
+      </div>
+      <div class="questions-guidees" id="questions-guidees"></div>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 3 : TRANSITION QUIZ FINAL -->
+  <div class="ecran fond-vert cache" id="ecran-transition-final">
+    <div class="carte anime">
+      <div class="badge">Vérification finale</div>
+      <div class="titre">Maintenant<br>prouve que tu as<br><span class="accent">bien compris !</span></div>
+      <div class="texte-intro">Tu vas voir 6 additions.<br>Pour chacune : <strong>quel est le résultat ?</strong> 💪</div>
+      <button class="btn" onclick="versQuizFinal()">C'est parti !</button>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 4 : QUIZ FINAL -->
+  <div class="ecran fond-vert cache" id="ecran-quiz-final">
+    <div class="quiz-carte">
+      <div class="prog-wrap">
+        <div class="prog-label" id="prog-label-final">Addition 1 / 6</div>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill-final"></div></div>
+      </div>
+      <div class="consigne-final">Quel est le <span style="color:var(--vert-bord);font-weight:700;">résultat</span> de cette addition ?</div>
+      <div class="addition-quiz" id="addition-quiz-final"></div>
+      <div class="choix-wrap-final" id="choix-quiz-final"></div>
+      <div class="feedback" id="feedback-final"></div>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 5A : RÉUSSI -->
+  <div class="ecran fond-vert cache" id="ecran-final-ok">
+    <div class="carte anime">
+      <div class="badge" style="background:rgba(16,140,90,0.15);color:#0a6e3f;">Notion maîtrisée ✓</div>
+      <div class="titre">Bravo <span class="accent" id="prenom-final-ok"></span> ! 🎉</div>
+      <div class="texte-intro" id="texte-final-ok"></div>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 5B : À REVOIR -->
+  <div class="ecran fond-vert cache" id="ecran-final-revoir">
+    <div class="carte anime">
+      <div class="badge" style="background:rgba(200,50,50,0.12);color:#a83232;">À revoir</div>
+      <div class="titre">Pas encore <span class="accent" id="prenom-final-revoir"></span>…</div>
+      <div class="texte-intro" id="texte-final-revoir"></div>
+      <button class="btn" onclick="revenirCours()">Revoir le cours</button>
+    </div>
+  </div>
+
+  <!-- ÉCRAN 5C : BLOQUÉ -->
+  <div class="ecran fond-vert cache" id="ecran-bloque">
+    <div class="carte anime">
+      <div class="badge" style="background:rgba(200,50,50,0.12);color:#a83232;">Aide en route 🙋</div>
+      <div class="titre">Ton prof va venir<br>t'aider <span class="accent" id="prenom-bloque"></span></div>
+      <div class="texte-intro">Tu as fait 3 tentatives.<br>Ton enseignant a été alerté et va passer te voir.<br><br>Pas de panique, c'est normal d'avoir besoin d'aide !</div>
+    </div>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec';
+    const FICHE_ID        = 'fractions_add_meme_denom';
+    const THEME           = 'Fractions';
+    const NIVEAU          = '5ème';
+    const MAX_TENTATIVES  = 3;
+
+    const params    = new URLSearchParams(window.location.search);
+    const nom       = params.get('nom')        || 'Élève';
+    const classe    = params.get('classe')     || '—';
+    const lycee     = params.get('lycee')      || '—';
+    const email     = params.get('email')      || '';
+    const prof      = params.get('prof')       || '';
+    const profEmail = params.get('prof_email') || '';
+
+    document.getElementById('header-lycee').textContent        = lycee;
+    document.getElementById('header-classe').textContent       = classe;
+    document.getElementById('header-nom').textContent          = nom;
+    document.getElementById('prenom-final-ok').textContent     = nom.split(' ')[0];
+    document.getElementById('prenom-final-revoir').textContent = nom.split(' ')[0];
+    document.getElementById('prenom-bloque').textContent       = nom.split(' ')[0];
+
+    let nbTentativesFinales = 0;
+    let dysActif = false;
+    const TOK = () => dysActif ? 1500 : 700;
+    const TKO = () => dysActif ? 2000 : 1200;
+
+    function basculerDYS() {
+      dysActif = !dysActif;
+      document.body.style.transition = 'opacity 0.2s';
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.classList.toggle('dys', dysActif);
+        ['header-dys','accueil-dys'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.toggle('on', dysActif);
+        });
+        document.body.style.opacity = '1';
+      }, 200);
+    }
+
+    function sauvegarder(statut, score, tentativeNum, extra) {
+      if (!email) return;
+      const payload = Object.assign({
+        type:'remediation', eleve_id:email, eleve_nom:nom,
+        classe, etablissement:lycee, fiche_id:FICHE_ID,
+        theme:THEME, niveau:NIVEAU, statut,
+        score_quiz:score, tentative_num:tentativeNum,
+        prof, prof_email:profEmail, alerte_traitee:'non'
+      }, extra || {});
+      fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) }).catch(() => {});
+    }
+
+    async function verifierProgression() {
+      if (!email) { allerVers('ecran-chargement','ecran-accueil'); return; }
+      try {
+        const res  = await fetch(APPS_SCRIPT_URL + '?type=remediation&etablissement=' + encodeURIComponent(lycee));
+        const data = await res.json();
+        if (data.status !== 'ok') { allerVers('ecran-chargement','ecran-accueil'); return; }
+        const lignes = (data.data || []).filter(r => r.eleve_id === email && r.fiche_id === FICHE_ID);
+        nbTentativesFinales = lignes.filter(r => ['quiz_final_echec','quiz_final_valide','echec_3_tentatives'].includes(r.statut)).length;
+        if (lignes.find(r => r.statut === 'echec_3_tentatives')) { allerVers('ecran-chargement','ecran-bloque'); return; }
+        if (lignes.find(r => r.statut === 'quiz_final_valide'))  { allerVers('ecran-chargement','ecran-final-ok'); return; }
+        allerVers('ecran-chargement','ecran-accueil');
+      } catch(e) { allerVers('ecran-chargement','ecran-accueil'); }
+    }
+    verifierProgression();
+
+    // ── DONNÉES ─────────────────────────────────────────────────
+    const ADDITIONS = [
+      { n1:1, n2:2, d:5,  res:3 },
+      { n1:2, n2:3, d:7,  res:5 },
+      { n1:1, n2:1, d:4,  res:2 },
+      { n1:3, n2:2, d:8,  res:5 },
+      { n1:1, n2:1, d:3,  res:2 },
+      { n1:4, n2:3, d:9,  res:7 },
+    ];
+
+    const ORDRE_FINAL = [2,4,0,5,1,3];
+
+    // ── EXERCICES GUIDÉS ─────────────────────────────────────────
+    let addIndex = 0, bloqueCours = false;
+
+    function versRetenir()   { allerVers('ecran-accueil','ecran-retenir'); }
+    function versExercices() { allerVers('ecran-retenir','ecran-cours'); setTimeout(() => chargerAddition(0), 500); }
+
+    function chargerAddition(ai) {
+      addIndex = ai; bloqueCours = false;
+      const a = ADDITIONS[ai];
+      document.getElementById('cours-badge').textContent = 'Addition ' + (ai+1) + ' / ' + ADDITIONS.length;
+      document.getElementById('cours-fill').style.width  = (ai / ADDITIONS.length * 100) + '%';
+      document.getElementById('fa-n1').textContent = a.n1;
+      document.getElementById('fa-d1').textContent = a.d;
+      document.getElementById('fa-n2').textContent = a.n2;
+      document.getElementById('fa-d2').textContent = a.d;
+      const zone = document.getElementById('questions-guidees');
+      zone.innerHTML = '';
+      afficherQ1(a);
+    }
+
+    function afficherQ1(a) {
+      afficherQ2(a, a.res);
+    }
+
+    function afficherQ2(a, numRes) {
+      const zone = document.getElementById('questions-guidees');
+      const bon = numRes + '/' + a.d;
+
+      const bloc = document.createElement('div');
+      bloc.className = 'question-bloc'; bloc.id = 'q2-bloc';
+      bloc.style.animationDelay = '0.05s';
+      bloc.innerHTML = `
+        <div class="q-label">Question</div>
+        <div class="q-texte">Écris le résultat de l'addition.<br><span style="font-size:13px;color:#8a6a3a;">Utilise la touche <strong>/</strong> du clavier pour la barre de fraction.</span></div>
+        <div class="champ-libre-wrap">
+          <input class="champ-libre" type="text" id="champ-q2" placeholder="ex: 3/5" style="width:120px;" />
+          <button class="btn-valider" onclick="repQ2('${bon}')">Valider</button>
+        </div>
+        <div class="feedback-inline" id="fb-q2"></div>
+      `;
+      zone.appendChild(bloc);
+      bloc.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      setTimeout(() => document.getElementById('champ-q2').focus(), 300);
+      document.getElementById('champ-q2').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') repQ2(bon);
+      });
+    }
+
+    function repQ2(bon) {
+      if (bloqueCours) return;
+      const val = document.getElementById('champ-q2').value.trim().replace(/\s/g,'');
+      if (!val) return;
+      bloqueCours = true;
+      const fb = document.getElementById('fb-q2');
+      const correct = val === bon;
+      // Détecter le piège dénominateurs additionnés
+      const a = ADDITIONS[addIndex];
+      const piege = a.res + '/' + (a.d * 2);
+      let msgFaux = '✗ Non, le résultat est ' + bon + '.';
+      if (val === piege) msgFaux = '✗ Attention ! On n\'additionne pas les dénominateurs. Le résultat est ' + bon + '.';
+      fb.textContent = correct ? '✓ Parfait !' : msgFaux;
+      fb.className = 'feedback-inline ' + (correct ? 'correct' : 'faux');
+      document.getElementById('champ-q2').disabled = true;
+      document.querySelector('#q2-bloc .btn-valider').disabled = true;
+      setTimeout(() => { bloqueCours = false; suiteExercice(); }, correct ? TOK() : TKO());
+    }
+
+    function suiteExercice() {
+      addIndex++;
+      if (addIndex >= ADDITIONS.length) {
+        allerVers('ecran-cours','ecran-transition-final');
+      } else {
+        const carte = document.querySelector('.cours-carte');
+        if (carte) carte.scrollTop = 0;
+        setTimeout(() => chargerAddition(addIndex), 400);
+      }
+    }
+
+    // ── QUIZ FINAL ───────────────────────────────────────────────
+    let qFinalIndex = 0, bloqueFinal = false, bonnesRepFinal = 0;
+
+    function versQuizFinal() {
+      allerVers('ecran-transition-final','ecran-quiz-final');
+      qFinalIndex = 0; bonnesRepFinal = 0; bloqueFinal = false;
+      setTimeout(() => chargerQuestionFinale(0), 500);
+    }
+
+    function chargerQuestionFinale(i) {
+      bloqueFinal = false;
+      const a = ADDITIONS[ORDRE_FINAL[i]];
+      document.getElementById('prog-label-final').textContent = 'Addition ' + (i+1) + ' / ' + ADDITIONS.length;
+      document.getElementById('prog-fill-final').style.width  = (i / ADDITIONS.length * 100) + '%';
+      document.getElementById('feedback-final').className = 'feedback';
+      document.getElementById('feedback-final').innerHTML = '';
+
+      // Afficher l'addition
+      document.getElementById('addition-quiz-final').innerHTML = `
+        <div class="frac-q"><div class="fq-n">${a.n1}</div><div class="fq-b"></div><div class="fq-n">${a.d}</div></div>
+        <div class="add-signe-q">+</div>
+        <div class="frac-q"><div class="fq-n">${a.n2}</div><div class="fq-b"></div><div class="fq-n">${a.d}</div></div>
+        <div class="add-signe-q">=</div>
+        <div class="add-signe-q" style="font-size:40px;color:var(--texte-fonce);">?</div>
+      `;
+
+      // Champ libre
+      const bon = a.res + '/' + a.d;
+      document.getElementById('choix-quiz-final').innerHTML = `
+        <div class="quiz-champ-wrap" style="display:flex;gap:10px;align-items:center;justify-content:center;width:100%;">
+          <input type="text" id="quiz-champ-final" placeholder="ex: 3/5"
+            style="width:120px;height:52px;border:2px solid rgba(10,110,63,0.3);border-radius:14px;background:rgba(255,255,255,0.7);font-size:22px;font-weight:700;color:var(--texte-fonce);text-align:center;outline:none;font-family:inherit;transition:border-color 0.2s;"
+            onfocus="this.style.borderColor='var(--vert-fort)'" onblur="this.style.borderColor='rgba(10,110,63,0.3)'" />
+          <button onclick="repondreFinal('${bon}')"
+            style="padding:13px 28px;border-radius:14px;border:2px solid var(--vert-bord);background:transparent;font-size:15px;font-weight:700;color:var(--vert-bord);cursor:pointer;font-family:inherit;transition:background 0.18s,color 0.18s;"
+            onmouseover="this.style.background='var(--vert-bord)';this.style.color='#fff'"
+            onmouseout="this.style.background='transparent';this.style.color='var(--vert-bord)'">Valider</button>
+        </div>
+        <div style="font-size:12px;color:var(--texte-vert);text-align:center;">Utilise <strong>/</strong> pour la barre de fraction</div>
+      `;
+      setTimeout(() => {
+        const ch = document.getElementById('quiz-champ-final');
+        if (ch) {
+          ch.focus();
+          ch.addEventListener('keydown', function(e) { if (e.key === 'Enter') repondreFinal(bon); });
+        }
+      }, 200);
+    }
+
+    function repondreFinal(bon) {
+      if (bloqueFinal) return;
+      const ch = document.getElementById('quiz-champ-final');
+      const val = ch ? ch.value.trim().replace(/\s/g,'') : '';
+      if (!val) return;
+      bloqueFinal = true;
+      const correct = val === bon;
+      const a = ADDITIONS[ORDRE_FINAL[qFinalIndex]];
+      const piege = a.res + '/' + (a.d * 2);
+      let msgFaux = '✗ Non, le résultat est ' + bon + '.';
+      if (val === piege) msgFaux = '✗ Attention ! On n\'additionne pas les dénominateurs. Résultat : ' + bon + '.';
+      const fb = document.getElementById('feedback-final');
+      fb.textContent = correct ? '✓ Bonne réponse !' : msgFaux;
+      fb.className = 'feedback ' + (correct ? 'correct' : 'faux');
+      if (!correct) { bloqueFinal = false; ch.value = ''; ch.focus(); return; }
+      bonnesRepFinal++;
+      setTimeout(() => {
+        qFinalIndex++;
+        if (qFinalIndex >= ADDITIONS.length) versFinalResultat();
+        else {
+          const z = document.getElementById('addition-quiz-final');
+          z.style.opacity = '0'; z.style.transition = 'opacity 0.3s';
+          setTimeout(() => { chargerQuestionFinale(qFinalIndex); z.style.opacity = '1'; }, 300);
+        }
+      }, correct ? TOK() : TKO());
+    }
+
+    function versFinalResultat() {
+      const scoreFinal = Math.round(bonnesRepFinal / ADDITIONS.length * 100);
+      nbTentativesFinales++;
+      if (scoreFinal >= 80) {
+        sauvegarder('quiz_final_valide', scoreFinal, nbTentativesFinales);
+        document.getElementById('texte-final-ok').innerHTML =
+          'Tu as eu <strong style="color:var(--vert-bord);">' + bonnesRepFinal + ' / ' + ADDITIONS.length + '</strong> bonnes réponses.<br>Tu sais additionner des fractions de même dénominateur ! 🎉';
+        allerVers('ecran-quiz-final','ecran-final-ok');
+      } else if (nbTentativesFinales >= MAX_TENTATIVES) {
+        sauvegarder('echec_3_tentatives', scoreFinal, nbTentativesFinales, { prof_email:profEmail });
+        allerVers('ecran-quiz-final','ecran-bloque');
+      } else {
+        sauvegarder('quiz_final_echec', scoreFinal, nbTentativesFinales);
+        const restantes = MAX_TENTATIVES - nbTentativesFinales;
+        document.getElementById('texte-final-revoir').innerHTML =
+          'Tu as eu <strong>' + bonnesRepFinal + ' / ' + ADDITIONS.length + '</strong> bonnes réponses (' + scoreFinal + '%).<br>' +
+          'Il te reste <strong>' + restantes + ' tentative' + (restantes > 1 ? 's' : '') + '</strong>.<br>Relis le cours, tu vas y arriver !';
+        allerVers('ecran-quiz-final','ecran-final-revoir');
+      }
+    }
+
+    function revenirCours() { allerVers('ecran-final-revoir','ecran-retenir'); }
+
+    function allerVers(a, b) {
+      const d = document.getElementById(a), ar = document.getElementById(b);
+      d.style.transition = 'opacity 0.5s ease'; d.style.opacity = '0';
+      setTimeout(() => {
+        d.classList.add('cache'); d.style.opacity = '1';
+        ar.classList.remove('cache'); ar.style.opacity = '0';
+        ar.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => { ar.style.opacity = '1'; }, 20);
+      }, 500);
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length-1; i > 0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a;
+    }
+  </script>
+</body>
+</html>
