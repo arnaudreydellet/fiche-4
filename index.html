@@ -11,7 +11,6 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      /* ── Palette écosystème ── */
       --navy: #1A2C4F;
       --navy-deep: #142340;
       --gold: #C28A42;
@@ -44,7 +43,6 @@
       --rxl: 22px;
     }
 
-    /* ══ MODE DYS ══════════════════════════════════════════════ */
     body.dys { font-family: 'OpenDyslexic', Arial, sans-serif !important; }
     body.dys .titre, body.dys .texte-intro, body.dys .q-texte,
     body.dys .choix-btn, body.dys .btn, body.dys .feedback,
@@ -56,7 +54,6 @@
     body.dys .choix-btn { font-size: 20px !important; padding: 18px 34px !important; }
     body.dys .carte, body.dys .quiz-carte, body.dys .cours-carte { background: rgba(255,253,240,0.82) !important; }
 
-    /* ══ ANIMATIONS ════════════════════════════════════════════ */
     @keyframes gradientWave {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
@@ -71,6 +68,10 @@
       50%  { box-shadow: 0 6px 20px rgba(194,138,66,.30), 0 0 0 0 rgba(194,138,66,.10); }
       100% { box-shadow: 0 0 0 0 rgba(194,138,66,0); }
     }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(194,138,66,0.45); }
+      50%     { box-shadow: 0 0 0 10px rgba(194,138,66,0); }
+    }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -80,7 +81,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ══ BASE ══════════════════════════════════════════════════ */
     html { height: 100%; }
     body {
       min-height: 100vh;
@@ -93,7 +93,6 @@
       overflow-y: auto;
     }
 
-    /* ══ HEADER ════════════════════════════════════════════════ */
     .header {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: center;
@@ -139,7 +138,80 @@
       background: var(--gold);
     }
 
-    /* ══ ÉCRANS ════════════════════════════════════════════════ */
+    /* Bouton audio toggle dans le header */
+    .header-audio-toggle {
+      position: absolute; left: 20px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,.7);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+      padding: 0;
+      line-height: 1;
+    }
+    .header-audio-toggle:hover {
+      background: var(--gold-pale);
+      border-color: var(--gold);
+      transform: scale(1.05);
+    }
+    .header-audio-toggle.active {
+      background: linear-gradient(180deg, var(--gold-l), var(--gold-deep));
+      border-color: var(--gold-deep);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(194,138,66,.30);
+    }
+    .header-audio-toggle.active.speaking {
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    /* Bouton audio toggle DANS LA CARTE D'ACCUEIL */
+    .audio-toggle-card {
+      margin-top: 8px;
+      padding: 10px 22px 10px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--gold-soft);
+      background: var(--gold-pale);
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: var(--gold-deep);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -.05px;
+      transition: all .2s;
+    }
+    .audio-toggle-card .ico {
+      font-size: 16px;
+      width: 24px; height: 24px;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,.8);
+    }
+    .audio-toggle-card:hover {
+      background: var(--gold-soft);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(194,138,66,.20);
+    }
+    .audio-toggle-card.active {
+      background: linear-gradient(180deg, var(--gold-l), var(--gold-deep));
+      border-color: var(--gold-deep);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(194,138,66,.30);
+    }
+    .audio-toggle-card.active .ico {
+      background: rgba(255,255,255,.25);
+    }
+    .audio-toggle-card.active.speaking {
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    body.dys .audio-toggle-card { font-family: 'OpenDyslexic', Arial, sans-serif !important; }
+
     .ecran { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 100vh; padding-top: 80px; padding-bottom: 40px; }
     .ecran.cache { display: none; }
 
@@ -154,7 +226,6 @@
       animation: gradientWave 28s ease infinite;
     }
 
-    /* ══ CARTES ════════════════════════════════════════════════ */
     .carte {
       background: rgba(255,255,255,.62);
       backdrop-filter: blur(14px);
@@ -170,7 +241,6 @@
     }
     .carte.anime { animation: fadeUp 0.8s cubic-bezier(.22,1,.36,1) both; }
 
-    /* ══ BADGES ════════════════════════════════════════════════ */
     .badge {
       font-family: 'Inter Tight', sans-serif;
       font-size: 10.5px;
@@ -184,7 +254,6 @@
       border: 1px solid var(--gold-soft);
     }
 
-    /* ══ TITRES ════════════════════════════════════════════════ */
     .titre {
       font-family: 'Sora', sans-serif;
       font-size: clamp(22px,4.5vw,30px);
@@ -202,7 +271,6 @@
       letter-spacing: -.2px;
     }
 
-    /* ══ TEXTE D'INTRO ═════════════════════════════════════════ */
     .texte-intro {
       font-family: 'Inter Tight', sans-serif;
       font-size: 14.5px;
@@ -218,7 +286,6 @@
       font-weight: 700;
     }
 
-    /* ══ BOUTON PRINCIPAL ══════════════════════════════════════ */
     .btn {
       margin-top: 22px;
       padding: 14px 36px;
@@ -240,7 +307,6 @@
     }
     .btn:active { transform: translateY(0); }
 
-    /* ══ COURS ═════════════════════════════════════════════════ */
     .cours-carte {
       background: rgba(255,255,255,.70);
       backdrop-filter: blur(14px);
@@ -295,7 +361,6 @@
       width: 0%;
     }
 
-    /* ── Règle ── */
     .regle-bloc {
       width: 100%;
       background: var(--gold-bg);
@@ -323,7 +388,6 @@
       letter-spacing: -.05px;
     }
 
-    /* ── Bouton "Comprendre la règle" (déclencheur initial) ── */
     .demarrer-wrap {
       width: 100%;
       display: flex;
@@ -350,7 +414,6 @@
     }
     .btn-demarrer:active { transform: translateY(0); }
 
-    /* ── Effet typewriter ── */
     .para-tw { min-height: 0; }
     .para-tw:empty { display: none; }
     @keyframes blinkCursor {
@@ -368,7 +431,6 @@
       transform: translateY(2px);
     }
 
-    /* ── Bouton "Suivant →" entre paragraphes ── */
     @keyframes fadeInSuivant {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -400,7 +462,6 @@
       box-shadow: 0 4px 12px rgba(194,138,66,.25);
     }
 
-    /* ── Affichage opération (cours guidé) ── */
     .addition-display {
       display: flex; align-items: center;
       gap: 16px;
@@ -442,7 +503,6 @@
       color: var(--gold-deep);
     }
 
-    /* ── Questions guidées ── */
     .questions-guidees {
       width: 100%;
       display: flex; flex-direction: column;
@@ -472,7 +532,6 @@
       font-weight: 700;
     }
 
-    /* ── Champ libre cours ── */
     .champ-libre-wrap {
       display: flex;
       gap: 10px;
@@ -546,7 +605,6 @@
       opacity: 1;
     }
 
-    /* ══ QUIZ FINAL ════════════════════════════════════════════ */
     .quiz-carte {
       background: rgba(255,255,255,.62);
       backdrop-filter: blur(14px);
@@ -704,6 +762,7 @@
       <span id="header-classe">—</span><span class="header-sep">·</span>
       <span class="header-nom" id="header-nom">—</span>
     </div>
+    <button class="header-audio-toggle" id="header-audio-toggle" onclick="toggleAudioMode()" title="Activer la lecture audio" aria-label="Activer la lecture audio">🔇</button>
     <div class="header-dys-badge" id="header-dys-badge">Mode DYS</div>
   </div>
 
@@ -718,6 +777,10 @@
     <div class="carte anime">
       <div class="badge">Fiche remédiation · 4</div>
       <div class="titre">Additionner et soustraire<br><span class="accent">des fractions de même dénominateur</span></div>
+      <button class="audio-toggle-card" id="audio-toggle-card" onclick="toggleAudioMode()" aria-label="Activer la lecture audio">
+        <span class="ico">🔇</span>
+        <span class="lbl">Activer la lecture audio</span>
+      </button>
       <button class="btn" onclick="versRetenir()">Commencer</button>
     </div>
   </div>
@@ -731,25 +794,20 @@
       <div class="regle-bloc">
         <div class="regle-label">La règle</div>
         <div class="regle-texte">
-          <!-- Bouton initial pour lancer l'animation -->
           <div class="demarrer-wrap" id="demarrer-wrap">
             <button class="btn-demarrer" onclick="demarrerLecture()">Comprendre la règle ✨</button>
           </div>
-          <!-- Les 3 paragraphes seront remplis par le typewriter -->
           <div class="para-tw" id="para-1"></div>
           <div class="para-tw" id="para-2" style="margin-top:16px;"></div>
           <div class="para-tw" id="para-3" style="margin-top:16px;"></div>
-          <!-- Bouton pour passer au paragraphe suivant -->
           <div class="suivant-wrap" id="suivant-wrap" style="display:none;">
             <button class="btn-suivant" onclick="suivantPara()">Suivant →</button>
           </div>
         </div>
       </div>
-      <!-- Bloc Exemples : caché jusqu'à la fin des 3 paragraphes -->
       <div id="bloc-exemples" style="display:none;width:100%;background:rgba(194,138,66,0.06);border-radius:14px;padding:20px 24px;margin-top:20px;opacity:0;transition:opacity 0.6s ease;">
         <div style="font-size:11px;font-weight:700;color:#B47A35;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;">Exemples</div>
-        <!-- Exemple addition -->
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;font-family:'Sora',sans-serif;">
           <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;">
             <span style="font-size:32px;font-weight:700;color:#C28A42;line-height:1;">2</span>
             <div style="width:44px;height:3px;background:#C28A42;border-radius:2px;"></div>
@@ -768,8 +826,7 @@
             <span style="font-size:32px;font-weight:700;color:#0E7348;line-height:1;">7</span>
           </div>
         </div>
-        <!-- Exemple soustraction -->
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;font-family:'Sora',sans-serif;">
           <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;">
             <span style="font-size:32px;font-weight:700;color:#C28A42;line-height:1;">5</span>
             <div style="width:44px;height:3px;background:#C28A42;border-radius:2px;"></div>
@@ -788,7 +845,7 @@
             <span style="font-size:32px;font-weight:700;color:#0E7348;line-height:1;">7</span>
           </div>
         </div>
-        <div style="margin-top:14px;font-size:14px;color:#4A4036;line-height:1.6;text-align:center;">
+        <div style="margin-top:14px;font-size:14px;color:#4A4036;line-height:1.6;text-align:center;font-family:'Inter Tight',sans-serif;">
           On additionne ou soustrait les numérateurs.<br>
           Le dénominateur <strong>reste toujours le même</strong>.
         </div>
@@ -835,15 +892,14 @@
       <div class="consigne-final">Quel est le <span style="color:var(--green-dark);font-weight:700;">résultat</span> ?</div>
       <div style="display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap;margin:8px 0;">
         <div class="addition-quiz" id="addition-quiz-final"></div>
-        <div style="font-size:34px;font-weight:700;color:var(--green-dark);">=</div>
+        <div style="font-family:'Sora',sans-serif;font-size:34px;font-weight:700;color:var(--green-dark);">=</div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
           <input type="number" id="quiz-rn" class="quiz-input" />
-          <div style="width:80px;height:3px;background:var(--texte-fonce);border-radius:2px;"></div>
+          <div style="width:80px;height:3px;background:var(--navy);border-radius:2px;"></div>
           <input type="number" id="quiz-rd" class="quiz-input" disabled />
         </div>
       </div>
       <button class="quiz-btn-val" onclick="repondreFinal()">Valider</button>
-      <div class="feedback" id="feedback-final"></div>
     </div>
   </div>
 
@@ -884,8 +940,6 @@
   const email = params.get('email') || '';
   const prof = params.get('prof') || '';
   const profEmail = params.get('prof_email') || '';
-  // ═══ DÉTECTION AUTOMATIQUE DU MODE DYS ═══
-  // L'espace élève transmet ?dys=1 dans l'URL si l'élève a coché "DYS" à l'inscription
   const dysActif = params.get('dys') === '1';
 
   document.getElementById('header-lycee').textContent = lycee;
@@ -895,16 +949,108 @@
   document.getElementById('prenom-final-revoir').textContent = nom.split(' ')[0];
   document.getElementById('prenom-bloque').textContent = nom.split(' ')[0];
 
-  // Application automatique du mode DYS au chargement
   if (dysActif) {
     document.body.classList.add('dys');
     document.getElementById('header-dys-badge').classList.add('visible');
   }
 
   let nbTentativesFinales = 0;
-  // Les timings s'adaptent au mode DYS (feedbacks plus longs pour laisser le temps de lire)
   const TOK = () => dysActif ? 1500 : 700;
   const TKO = () => dysActif ? 2000 : 1200;
+
+  // ══ MODE AUDIO GLOBAL (Web Speech API) ═══════════════════════
+  let audioMode = false;
+  let voixFr = null;
+
+  function chargerVoix() {
+    const voix = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+    voixFr = voix.find(v => v.lang.startsWith('fr') && /natural|neural|premium|google|enhanced/i.test(v.name))
+          || voix.find(v => v.lang === 'fr-FR')
+          || voix.find(v => v.lang.startsWith('fr'))
+          || null;
+  }
+  if (window.speechSynthesis) {
+    chargerVoix();
+    window.speechSynthesis.onvoiceschanged = chargerVoix;
+  }
+
+  function nettoyerPourTTS(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return (tmp.textContent || tmp.innerText || '').trim();
+  }
+
+  function parler(html, options) {
+    options = options || {};
+    if (!window.speechSynthesis) return;
+    if (!audioMode && !options.force) return;
+    window.speechSynthesis.cancel();
+    const texte = nettoyerPourTTS(html);
+    if (!texte) return;
+    const utt = new SpeechSynthesisUtterance(texte);
+    utt.lang = 'fr-FR';
+    utt.rate = 0.92; utt.pitch = 1.0; utt.volume = 1.0;
+    if (voixFr) utt.voice = voixFr;
+    const headerBtn = document.getElementById('header-audio-toggle');
+    const cardBtn = document.getElementById('audio-toggle-card');
+    if (audioMode) {
+      if (headerBtn) headerBtn.classList.add('speaking');
+      if (cardBtn) cardBtn.classList.add('speaking');
+    }
+    utt.onend = () => {
+      if (headerBtn) headerBtn.classList.remove('speaking');
+      if (cardBtn) cardBtn.classList.remove('speaking');
+      if (options.onEnd) options.onEnd();
+    };
+    utt.onerror = () => {
+      if (headerBtn) headerBtn.classList.remove('speaking');
+      if (cardBtn) cardBtn.classList.remove('speaking');
+      if (options.onEnd) options.onEnd();
+    };
+    window.speechSynthesis.speak(utt);
+  }
+
+  function arreterLecture() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    const headerBtn = document.getElementById('header-audio-toggle');
+    const cardBtn = document.getElementById('audio-toggle-card');
+    if (headerBtn) headerBtn.classList.remove('speaking');
+    if (cardBtn) cardBtn.classList.remove('speaking');
+  }
+
+  function toggleAudioMode() {
+    audioMode = !audioMode;
+    const headerBtn = document.getElementById('header-audio-toggle');
+    const cardBtn = document.getElementById('audio-toggle-card');
+    if (audioMode) {
+      if (headerBtn) {
+        headerBtn.classList.add('active');
+        headerBtn.textContent = '🔊';
+        headerBtn.title = 'Désactiver la lecture audio';
+        headerBtn.setAttribute('aria-label', 'Désactiver la lecture audio');
+      }
+      if (cardBtn) {
+        cardBtn.classList.add('active');
+        cardBtn.querySelector('.ico').textContent = '🔊';
+        cardBtn.querySelector('.lbl').textContent = 'Audio activé — clique pour désactiver';
+        cardBtn.setAttribute('aria-label', 'Désactiver la lecture audio');
+      }
+    } else {
+      if (headerBtn) {
+        headerBtn.classList.remove('active', 'speaking');
+        headerBtn.textContent = '🔇';
+        headerBtn.title = 'Activer la lecture audio';
+        headerBtn.setAttribute('aria-label', 'Activer la lecture audio');
+      }
+      if (cardBtn) {
+        cardBtn.classList.remove('active', 'speaking');
+        cardBtn.querySelector('.ico').textContent = '🔇';
+        cardBtn.querySelector('.lbl').textContent = 'Activer la lecture audio';
+        cardBtn.setAttribute('aria-label', 'Activer la lecture audio');
+      }
+      arreterLecture();
+    }
+  }
 
   function sauvegarder(statut, score, tentativeNum, extra) {
     if (!email) return;
@@ -932,7 +1078,6 @@
   }
   verifierProgression();
 
-  // signe: '+' ou '-', res = résultat du numérateur
   const EXERCICES = [
     { n1:1, n2:2, d:5, res:3, signe:'+' },
     { n1:2, n2:3, d:7, res:5, signe:'+' },
@@ -947,12 +1092,21 @@
 
   function versRetenir() {
     allerVers('ecran-accueil','ecran-retenir');
-    // L'animation typewriter est déclenchée par le bouton "Comprendre la règle"
+    // Reset au cas où on y reviendrait
+    document.getElementById('demarrer-wrap').style.display = 'flex';
+    document.getElementById('demarrer-wrap').style.opacity = '1';
+    document.getElementById('para-1').innerHTML = '';
+    document.getElementById('para-2').innerHTML = '';
+    document.getElementById('para-3').innerHTML = '';
+    document.getElementById('suivant-wrap').style.display = 'none';
+    document.getElementById('bloc-exemples').style.display = 'none';
+    document.getElementById('bloc-exemples').style.opacity = '0';
+    document.getElementById('bloc-compris').style.display = 'none';
+    document.getElementById('bloc-compris').style.opacity = '0';
+    paraIndex = 0;
   }
   function versExercices() { allerVers('ecran-retenir','ecran-cours'); setTimeout(() => chargerAddition(0), 500); }
 
-  // ══ TYPEWRITER POUR L'ÉCRAN "À RETENIR" ══════════════════════
-  // Les 3 paragraphes de la règle (HTML, peut contenir des <strong>)
   const PARAGRAPHES_RETENIR = [
     'Pour additionner deux fractions qui ont le <strong style="color:#C28A42;">même dénominateur</strong>, on additionne uniquement les <strong style="color:#C28A42;">numérateurs</strong>.',
     'Le dénominateur, lui, <strong>reste le même</strong> — on ne le touche pas.',
@@ -962,7 +1116,6 @@
   let paraIndex = 0;
   let twTimer = null;
 
-  // Déclencheur de l'animation : appelé par le bouton "Comprendre la règle"
   function demarrerLecture() {
     const dem = document.getElementById('demarrer-wrap');
     dem.style.transition = 'opacity 0.3s ease';
@@ -974,7 +1127,6 @@
     }, 300);
   }
 
-  // Écrit un paragraphe HTML caractère par caractère, mais insère les balises d'un coup
   function typewriter(elementId, html, charDelay, onDone) {
     const el = document.getElementById(elementId);
     el.innerHTML = '';
@@ -1005,13 +1157,11 @@
       }
       const tok = tokens[idx];
       if (tok.startsWith('<')) {
-        written += tok;
-        idx++;
+        written += tok; idx++;
         txtSpan.innerHTML = written;
         step();
       } else {
-        written += tok;
-        idx++;
+        written += tok; idx++;
         txtSpan.innerHTML = written;
         twTimer = setTimeout(step, charDelay);
       }
@@ -1022,6 +1172,7 @@
   function ecrireParagraphe(i) {
     document.getElementById('suivant-wrap').style.display = 'none';
     const id = 'para-' + (i + 1);
+    parler(PARAGRAPHES_RETENIR[i]);
     typewriter(id, PARAGRAPHES_RETENIR[i], 35, () => {
       if (i < PARAGRAPHES_RETENIR.length - 1) {
         const wrap = document.getElementById('suivant-wrap');
@@ -1036,6 +1187,7 @@
   }
 
   function suivantPara() {
+    arreterLecture();
     paraIndex++;
     if (paraIndex < PARAGRAPHES_RETENIR.length) {
       ecrireParagraphe(paraIndex);
@@ -1066,7 +1218,6 @@
     document.getElementById('add-signe-cours').textContent = a.signe;
     const zone = document.getElementById('questions-guidees');
     zone.innerHTML = '';
-    const bon = a.res + '/' + a.d;
     const bloc = document.createElement('div');
     bloc.className = 'question-bloc'; bloc.id = 'q-bloc';
     bloc.innerHTML =
@@ -1074,15 +1225,16 @@
       '<div class="q-texte">Écris le résultat.</div>' +
       '<div style="display:flex;align-items:center;gap:10px;justify-content:center;margin:12px 0;">' +
         '<div style="display:flex;flex-direction:column;align-items:center;gap:5px;">' +
-          '<input type="number" id="champ-rn" style="width:76px;height:52px;border:2px solid rgba(180,100,20,0.3);border-radius:12px;background:rgba(255,255,255,0.7);font-size:24px;font-weight:700;color:#1A2C4F;text-align:center;outline:none;font-family:inherit;" />' +
-          '<div style="height:3px;background:#1A2C4F;border-radius:2px;width:76px;"></div>' +
-          '<input type="number" id="champ-rd" style="width:76px;height:52px;border:2px solid rgba(180,100,20,0.3);border-radius:12px;background:rgba(255,255,255,0.7);font-size:24px;font-weight:700;color:#1A2C4F;text-align:center;outline:none;font-family:inherit;" disabled />' +
+          '<input type="number" id="champ-rn" class="champ-libre" />' +
+          '<div style="height:3px;background:#1A2C4F;border-radius:2px;width:80px;"></div>' +
+          '<input type="number" id="champ-rd" class="champ-libre" disabled />' +
         '</div>' +
         '<button class="btn-valider" id="btn-q" onclick="repQ()">Valider</button>' +
       '</div>' +
       '<div class="feedback-inline" id="fb-q"></div>';
     zone.appendChild(bloc);
     bloc.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    parler('Écris le résultat de ' + a.n1 + ' sur ' + a.d + ' ' + (a.signe === '+' ? 'plus' : 'moins') + ' ' + a.n2 + ' sur ' + a.d);
     setTimeout(() => { const ch=document.getElementById('champ-rn'); if(ch) ch.focus(); }, 300);
     document.getElementById('champ-rn').addEventListener('keydown', function(e) { if(e.key==='Enter') repQ(); });
     document.getElementById('champ-rd').addEventListener('keydown', function(e) { if(e.key==='Enter') repQ(); });
@@ -1095,29 +1247,62 @@
     const rdEl = document.getElementById('champ-rd');
     const fb = document.getElementById('fb-q');
 
+    // ── Étape 1 : numérateur ──
     if (!rnEl.disabled && rdEl.disabled) {
-      const vn = parseInt(rnEl.value);
-      if (isNaN(vn)) return;
+      const raw = (rnEl.value || '').trim();
+      if (raw === '') { rnEl.focus(); return; }
+      const vn = parseInt(raw, 10);
+      if (isNaN(vn)) { rnEl.focus(); return; }
       if (vn !== a.res) {
-        fb.textContent = '✗ Non, le numérateur est ' + a.res + '.';
-        fb.className = 'feedback-inline faux'; rnEl.value=''; rnEl.focus(); return;
+        // Mauvaise réponse : feedback rouge → disparaît → on RESTE sur l'exercice
+        fb.textContent = '✗ Non, le numérateur est ' + a.res + '. Réessaie.';
+        fb.className = 'feedback-inline faux';
+        parler(fb.textContent);
+        bloqueCours = true;
+        setTimeout(() => {
+          fb.style.opacity = '0';
+          fb.className = 'feedback-inline';
+          fb.textContent = '';
+          rnEl.value = '';
+          rnEl.focus();
+          bloqueCours = false;
+        }, TKO());
+        return;
       }
-      rnEl.disabled=true; rnEl.style.borderColor='rgba(16,140,90,0.5)'; rnEl.style.background='rgba(16,140,90,0.07)';
-      rdEl.disabled=false; rdEl.style.borderColor='rgba(180,100,20,0.4)';
-      fb.textContent = '✓ Exact ! Maintenant le dénominateur.'; fb.className = 'feedback-inline correct';
-      setTimeout(() => { rdEl.focus(); fb.className='feedback-inline'; fb.style.opacity='0'; }, TOK());
+      rnEl.disabled=true; rnEl.style.borderColor='rgba(21,163,98,0.45)'; rnEl.style.background='rgba(21,163,98,0.07)'; rnEl.style.color='var(--green-dark)';
+      rdEl.disabled=false; rdEl.style.borderColor='var(--border)';
+      fb.textContent = '✓ Exact ! Maintenant le dénominateur.';
+      fb.className = 'feedback-inline correct';
+      parler('Exact ! Maintenant le dénominateur.');
+      bloqueCours = true;
+      setTimeout(() => { rdEl.focus(); fb.className='feedback-inline'; fb.style.opacity='0'; bloqueCours = false; }, TOK());
       return;
     }
 
-    const vd = parseInt(rdEl.value);
-    if (isNaN(vd)) return;
+    // ── Étape 2 : dénominateur ──
+    if (rdEl.disabled) return;
+    const raw = (rdEl.value || '').trim();
+    if (raw === '') { rdEl.focus(); return; }
+    const vd = parseInt(raw, 10);
+    if (isNaN(vd)) { rdEl.focus(); return; }
     bloqueCours = true;
     if (vd !== a.d) {
-      fb.textContent = '✗ Non, le dénominateur est ' + a.d + '.';
-      fb.className = 'feedback-inline faux'; bloqueCours=false; rdEl.value=''; rdEl.focus(); return;
+      fb.textContent = '✗ Non, le dénominateur reste ' + a.d + '. Réessaie.';
+      fb.className = 'feedback-inline faux';
+      parler(fb.textContent);
+      setTimeout(() => {
+        fb.style.opacity = '0';
+        fb.className = 'feedback-inline';
+        fb.textContent = '';
+        rdEl.value = '';
+        rdEl.focus();
+        bloqueCours = false;
+      }, TKO());
+      return;
     }
-    rdEl.disabled=true; rdEl.style.borderColor='rgba(16,140,90,0.5)'; rdEl.style.background='rgba(16,140,90,0.07)';
+    rdEl.disabled=true; rdEl.style.borderColor='rgba(21,163,98,0.45)'; rdEl.style.background='rgba(21,163,98,0.07)'; rdEl.style.color='var(--green-dark)';
     fb.textContent = '✓ Parfait !'; fb.className = 'feedback-inline correct';
+    parler('Parfait !');
     document.getElementById('btn-q').disabled = true;
     setTimeout(() => { bloqueCours=false; suiteExercice(); }, TOK());
   }
@@ -1130,11 +1315,13 @@
     setTimeout(() => chargerAddition(addIndex), 400);
   }
 
+  // ── QUIZ FINAL (déjà tolérant : pattern numEtaitJuste) ───────
   let qFinalIndex = 0, bloqueFinal = false, bonnesRepFinal = 0;
+  let numEtaitJuste = false;
 
   function versQuizFinal() {
     allerVers('ecran-transition-final','ecran-quiz-final');
-    qFinalIndex = 0; bonnesRepFinal = 0; bloqueFinal = false;
+    qFinalIndex = 0; bonnesRepFinal = 0; bloqueFinal = false; numEtaitJuste = false;
     setTimeout(() => chargerQuestionFinale(0), 500);
   }
 
@@ -1144,12 +1331,10 @@
     const a = EXERCICES[ORDRE_FINAL[i]];
     document.getElementById('prog-label-final').textContent = 'Exercice ' + (i+1) + ' / ' + EXERCICES.length;
     document.getElementById('prog-fill-final').style.width = (i / EXERCICES.length * 100) + '%';
-    document.getElementById('feedback-final').className = 'feedback';
-    document.getElementById('feedback-final').innerHTML = '';
     const rn = document.getElementById('quiz-rn');
     const rd = document.getElementById('quiz-rd');
-    rn.value=''; rn.disabled=false; rn.style.borderColor='rgba(10,110,63,0.3)'; rn.style.background='rgba(255,255,255,0.8)';
-    rd.value=''; rd.disabled=true;  rd.style.borderColor='rgba(10,110,63,0.3)'; rd.style.background='rgba(255,255,255,0.8)';
+    rn.value=''; rn.disabled=false; rn.style.borderColor='var(--border)'; rn.style.background='rgba(255,255,255,.85)';
+    rd.value=''; rd.disabled=true;  rd.style.borderColor='var(--border)'; rd.style.background='rgba(255,255,255,.85)';
     document.getElementById('addition-quiz-final').innerHTML =
       '<div class="frac-q"><div class="fq-n">' + a.n1 + '</div><div class="fq-b"></div><div class="fq-n">' + a.d + '</div></div>' +
       '<div class="add-signe-q">' + a.signe + '</div>' +
@@ -1157,11 +1342,8 @@
     setTimeout(() => rn.focus(), 200);
     rn.onkeydown = ev => { if(ev.key==='Enter') repondreFinal(); };
     rd.onkeydown = ev => { if(ev.key==='Enter') repondreFinal(); };
+    parler('Calcule ' + a.n1 + ' sur ' + a.d + ' ' + (a.signe === '+' ? 'plus' : 'moins') + ' ' + a.n2 + ' sur ' + a.d);
   }
-
-  // Suit si le numérateur saisi pour la question courante était juste
-  // (utilisé pour ne compter le bon score que si num ET dénom sont justes)
-  let numEtaitJuste = false;
 
   function repondreFinal() {
     if (bloqueFinal) return;
@@ -1169,30 +1351,33 @@
     const rnEl = document.getElementById('quiz-rn');
     const rdEl = document.getElementById('quiz-rd');
 
-    // ── Étape 1 : validation du numérateur ──
+    // ── Étape 1 : numérateur (toléré) ──
     if (!rnEl.disabled && rdEl.disabled) {
-      const vn = parseInt(rnEl.value);
-      if (isNaN(vn)) return;
-      // On enregistre si c'était juste, mais on accepte la valeur même si elle est fausse
+      const raw = (rnEl.value || '').trim();
+      if (raw === '') { rnEl.focus(); return; }
+      const vn = parseInt(raw, 10);
+      if (isNaN(vn)) { rnEl.focus(); return; }
       numEtaitJuste = (vn === a.res);
-      // Désactiver le numérateur, activer le dénominateur, sans feedback
       rnEl.disabled = true;
       rdEl.disabled = false;
+      rdEl.style.borderColor = 'var(--border)';
       rdEl.focus();
       return;
     }
 
-    // ── Étape 2 : validation du dénominateur ──
-    const vd = parseInt(rdEl.value);
-    if (isNaN(vd)) return;
+    // ── Étape 2 : dénominateur (toléré) ──
+    if (rdEl.disabled) return;
+    const raw = (rdEl.value || '').trim();
+    if (raw === '') { rdEl.focus(); return; }
+    const vd = parseInt(raw, 10);
+    if (isNaN(vd)) { rdEl.focus(); return; }
     bloqueFinal = true;
     rdEl.disabled = true;
-    // On compte la question juste seulement si num ET dénom sont justes
     const denEtaitJuste = (vd === a.d);
     if (numEtaitJuste && denEtaitJuste) {
       bonnesRepFinal++;
     }
-    // On enchaîne directement sur la question suivante (pas de feedback)
+    // Pas de feedback intermédiaire — on enchaîne directement
     setTimeout(() => {
       qFinalIndex++;
       if (qFinalIndex >= EXERCICES.length) versFinalResultat();
